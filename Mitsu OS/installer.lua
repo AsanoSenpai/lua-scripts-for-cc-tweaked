@@ -191,6 +191,7 @@ local confirm = read()
 if confirm == "y" or confirm == "Y" then
 	-- delete existing files
 	local repositoryName = getRepositoryName(repoUrl)
+	print("test successfull")
 	deleteExistingFiles(repositoryName)
 
 	-- start download
