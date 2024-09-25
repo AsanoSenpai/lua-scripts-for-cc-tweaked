@@ -136,8 +136,8 @@ elseif input == "install" or "reinstall" then
 	end	
 menuOptions(title, choices, actions)
 
-if input == "stable" then aptsource = "https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked.git/Mitsu OS/apt/"
-elseif input == "beta" then aptsource = "https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked.git/Mitsu OS/beta/"
+if input == "stable" then aptsource = "https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked/blob/main/Mitsu%20OS/apt/"
+elseif input == "beta" then aptsource = "https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked/blob/main/Mitsu%20OS/beta/"
 elseif input == "custom" then 
 	print("what is the server's url?")
 	print("give full path including https://")
