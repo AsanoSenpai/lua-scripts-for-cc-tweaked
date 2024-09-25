@@ -138,7 +138,7 @@ elseif input == "custom" then
 	else local repoUrl = input end
 end
 			
-print("Download Finished")
+-- print("Download Finished")
 
 -- download file using wget
 local function downloadFile(url, destination)
@@ -190,7 +190,7 @@ local confirm = read()
 
 if confirm == "y" or confirm == "Y" then
 	-- delete existing files
-	local repositoryName = getRepositoryName(repoUrl)
+	local repositoryName = getRepositoryName("https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/stable?ref=main")
 	print("test successfull")
 	deleteExistingFiles(repositoryName)
 
