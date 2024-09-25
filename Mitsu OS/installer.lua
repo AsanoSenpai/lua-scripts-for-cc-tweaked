@@ -154,7 +154,7 @@ local function downloadDirectory(url, destination)
 	local content = listing.readAll()
 	listing.close()
 
-	local files = textutils.unserializeJSONN(content)
+	local files = textutils.unserializeJSON(content)
 
 	for _, file in ipairs(files) do
 		if file.type == "file" then
