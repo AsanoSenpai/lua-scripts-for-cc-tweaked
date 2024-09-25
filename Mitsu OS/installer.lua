@@ -5,7 +5,7 @@
 local ogTerm = term.current()
 local termX, termY = term.getSize()
 local bufferWindow = window.create(ogTerm, 1, 1, termX, termY)
--- Uses ">" as pointer instead of "->"
+
 function menuOptions(title, tChoices, tActions)
 local check = true
 local nSelection = 1
@@ -60,10 +60,10 @@ print("")
 until check == false 
 end
 
--- minux netinstaller
+-- mitsu os netinstaller
 term.clear()
 term.setCursorPos(1,1)
--- print("Welcome to the Minux installer")
+-- print("Welcome to the Mitsu OS installer")
 -- print("")
 -- print("type 'install' to install minux")
 -- print("'reinstall' to overwrite an existing install")
@@ -72,8 +72,8 @@ term.setCursorPos(1,1)
 -- write("Choice:")
 -- input = read()
 
-	local title = "Minux Installer"
-	local choices = {"Install minux", "reinstall minux", "repair minux", "start an empty shell"}
+	local title = "Mitsu OS Installer"
+	local choices = {"Install Mitsu OS", "Reinstall Mitsu OS", "Repair Mistu OS", "Start an empty shell"}
 	local actions = {}
 
 	actions[1] = function()
@@ -118,7 +118,7 @@ elseif input == "install" or "reinstall" then
 	end
 
 -- selecting installation source
-	local title = "Minux Installation source"
+	local title = "Mitsu OS Installation source"
 	local choices = {"Stable server", "Beta server", "Custom server"}
 	local actions = {}
 
@@ -135,9 +135,10 @@ elseif input == "install" or "reinstall" then
 	input = "custom"
 	end	
 menuOptions(title, choices, actions)
+end
 
-if input == "stable" then aptsource = "https://minux.vtchost.com/apt/"
-elseif input == "beta" then aptsource = "https://minux.vtchost.com/beta/"
+if input == "stable" then repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
+elseif input == "beta" then repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/beta/contents"
 elseif input == "custom" then 
 	print("what is the server's url?")
 	print("give full path including https://")
