@@ -63,14 +63,6 @@ end
 -- Mitsu OS installer
 term.clear()
 term.setCursorPos(1,1)
--- print("Welcome to the Mitsu OS installer")
--- print("")
--- print("type 'install' to install Mitsu OS")
--- print("'reinstall' to overwrite an existing install")
--- print("'repair' to reinstall an existing system") 
--- print("anything else to launch a prompt/abort.")
--- write("Choice:")
--- input = read()
 
 	local title = "Mitsu OS Installer"
 	local choices = {"Install Mitsu OS", "reinstall Mitsu OS", "repair Mitsu OS", "start an empty shell"}
