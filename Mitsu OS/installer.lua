@@ -60,20 +60,20 @@ print("")
 until check == false 
 end
 
--- minux netinstaller
+-- Mitsu OS installer
 term.clear()
 term.setCursorPos(1,1)
--- print("Welcome to the Minux installer")
+-- print("Welcome to the Mitsu OS installer")
 -- print("")
--- print("type 'install' to install minux")
+-- print("type 'install' to install Mitsu OS")
 -- print("'reinstall' to overwrite an existing install")
 -- print("'repair' to reinstall an existing system") 
 -- print("anything else to launch a prompt/abort.")
 -- write("Choice:")
 -- input = read()
 
-	local title = "Minux Installer"
-	local choices = {"Install minux", "reinstall minux", "repair minux", "start an empty shell"}
+	local title = "Mitsu OS Installer"
+	local choices = {"Install Mitsu OS", "reinstall Mitsu OS", "repair Mitsu OS", "start an empty shell"}
 	local actions = {}
 
 	actions[1] = function()
@@ -110,7 +110,7 @@ elseif input == "install" or "reinstall" then
 -- we check to see if startup file already exists
 		if fs.exists("/startup") then
 			print("This system already has software installed")
-			print("Clear it out before installing minux")
+			print("Clear it out before installing Mitsu OS")
 			print("Hit Enter to exit to a normal shell")
 			input = read()
 			return 0
@@ -118,7 +118,7 @@ elseif input == "install" or "reinstall" then
 	end
 
 -- selecting installation source
-	local title = "Minux Installation source"
+	local title = "Mitsu OS Installation source"
 	local choices = {"Stable server", "Beta server", "Custom server"}
 	local actions = {}
 
@@ -145,53 +145,8 @@ elseif input == "custom" then
 	if input == nil or input == "" then print("invalid input, aborting") return 0
 	else aptsource = input end
 end
-
--- we check if the provided source is valid/live
-print("Downloading File manifest..")
-shell.run("wget "..aptsource.."/manifest/minux-main.db /etc/apt/manifest/minux-main.db")
-
--- now we open the manifest file and check if it is actually a manifest file at all (invalid url catcher)
-print("Retrieving files")
-file = "start"
-local temp = fs.open("etc/apt/manifest/minux-main.db", "r")
--- 404 error catcher
-file = temp.readLine()
-if file ~= "AIF" then
-	print("Error 404, Pack data missing or corrupt, aborting.")
-	print("AIF verification failed, the downloaded file is not a manifest file")
-	print("This means the provided source URL is invalid")
-	return 0
-end
-
--- we download the files for "minux-main" as described in the manifest
-print("manifest retrieved, downloading files")
-while file ~= nil do
-	file = temp.readLine()
-	if file ~= nil then
-		fs.delete(file)
-		shell.run("wget "..aptsource.."repository/minux-main/"..file.." "..file)
-	end
-end
-temp.close()
 			
 print("Download Finished")
-
--- now we write the files down
-print("Generating installed.db")
-file = fs.open("/etc/apt/list/installed.db" , "w")
-file.writeLine("minux-main")
-file.close()
-print("Generating source file")
-sourcefile = fs.open("/usr/apt/source.ls" , "w")
-sourcefile.writeLine(aptsource)
-sourcefile.close()
-print("Generating additional files")
-file = fs.open("/etc/apt/list/version/minux-main.v" , "w")
-file.writeLine("cleaninstall")
-file.close()
-print("Building boot configuration")
-shell.run("/etc/apt/sys/rebuildalias.sys")
-
 
 
 -- we wait for an enter, then reboot
