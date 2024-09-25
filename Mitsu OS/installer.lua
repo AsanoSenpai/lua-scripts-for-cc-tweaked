@@ -1,5 +1,6 @@
 -- Menu API by ComputerCrafter
 -- buffer added by Missooni
+-- installer concept by shorun (Minux)
  
 local ogTerm = term.current()
 local termX, termY = term.getSize()
@@ -144,17 +145,6 @@ elseif input == "custom" then
 	if input == nil or input == "" then print("invalid input, aborting") return 0
 	else aptsource = input end
 end
-
--- we download the files for "Mitsu OS"
-print("downloading files...")
-while file ~= nil do
-	file = temp.readLine()
-	if file ~= nil then
-		fs.delete(file)
-		shell.run("wget "..aptsource.."https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked.git/Mitsu OS/"..file.." "..file)
-	end
-end
-temp.close()
 			
 print("Download Finished")
 
