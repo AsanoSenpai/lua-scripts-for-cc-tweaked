@@ -115,7 +115,6 @@ elseif input == "install" or "reinstall" then
 			input = read()
 			return 0
 		end
-	end
 
 -- selecting installation source
 	local title = "Mitsu OS Installation source"
