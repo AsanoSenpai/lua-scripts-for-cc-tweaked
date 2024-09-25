@@ -130,7 +130,6 @@ elseif input == "install" or "reinstall" then
 	print("beta selected")
 	input = "beta"
 	end
-	end	
 menuOptions(title, choices, actions)
 
 if input == "stable" then local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
