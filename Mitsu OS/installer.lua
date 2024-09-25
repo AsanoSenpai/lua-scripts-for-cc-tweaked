@@ -60,12 +60,20 @@ print("")
 until check == false 
 end
 
--- mitsu os installer
+-- minux netinstaller
 term.clear()
 term.setCursorPos(1,1)
+-- print("Welcome to the Minux installer")
+-- print("")
+-- print("type 'install' to install minux")
+-- print("'reinstall' to overwrite an existing install")
+-- print("'repair' to reinstall an existing system") 
+-- print("anything else to launch a prompt/abort.")
+-- write("Choice:")
+-- input = read()
 
-	local title = "Mitsu OS Installer"
-	local choices = {"Install Mitsu OS", "reinstall Mitsu OS", "repair Mitsu OS", "start an empty shell"}
+	local title = "Minux Installer"
+	local choices = {"Install minux", "reinstall minux", "repair minux", "start an empty shell"}
 	local actions = {}
 
 	actions[1] = function()
@@ -110,7 +118,7 @@ elseif input == "install" or "reinstall" then
 	end
 
 -- selecting installation source
-	local title = "Mitsu OS Installation source"
+	local title = "Minux Installation source"
 	local choices = {"Stable server", "Beta server", "Custom server"}
 	local actions = {}
 
@@ -128,76 +136,68 @@ elseif input == "install" or "reinstall" then
 	end	
 menuOptions(title, choices, actions)
 
-if input == "stable" then local repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/stable/"
-elseif input == "beta" then local repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/beta/"
+if input == "stable" then aptsource = "https://minux.vtchost.com/apt/"
+elseif input == "beta" then aptsource = "https://minux.vtchost.com/beta/"
 elseif input == "custom" then 
 	print("what is the server's url?")
 	print("give full path including https://")
 	input = read()
 	if input == nil or input == "" then print("invalid input, aborting") return 0
-	else local repoUrl = input end
+	else aptsource = input end
 end
 
--- GitHub repository URL
--- local repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/"
+-- we check if the provided source is valid/live
+print("Downloading File manifest..")
+shell.run("wget "..aptsource.."/manifest/minux-main.db /etc/apt/manifest/minux-main.db")
 
--- Download file using wget
-local function downloadFile(url, destination)
-  shell.run("wget", url, destination)
+-- now we open the manifest file and check if it is actually a manifest file at all (invalid url catcher)
+print("Retrieving files")
+file = "start"
+local temp = fs.open("etc/apt/manifest/minux-main.db", "r")
+-- 404 error catcher
+file = temp.readLine()
+if file ~= "AIF" then
+	print("Error 404, Pack data missing or corrupt, aborting.")
+	print("AIF verification failed, the downloaded file is not a manifest file")
+	print("This means the provided source URL is invalid")
+	return 0
 end
 
--- Download directory and its contents recursively
-local function downloadDirectory(url, destination)
-  shell.run("mkdir", destination)
-  shell.run("cd", destination)
-  
-  local listing = http.get(url)
-  local content = listing.readAll()
-  listing.close()
-  
-  local files = textutils.unserializeJSON(content)
-  
-  for _, file in ipairs(files) do
-    if file.type == "file" then
-      downloadFile(file.download_url, file.name)
-    elseif file.type == "dir" then
-      downloadDirectory(file.url, file.name)
-    end
-  end
-  
-  shell.run("cd", "..")
+-- we download the files for "minux-main" as described in the manifest
+print("manifest retrieved, downloading files")
+while file ~= nil do
+	file = temp.readLine()
+	if file ~= nil then
+		fs.delete(file)
+		shell.run("wget "..aptsource.."repository/minux-main/"..file.." "..file)
+	end
 end
+temp.close()
+			
+print("Download Finished")
 
--- Get repository name from URL
-local function getRepositoryName(url)
-  local _, _, repositoryName = string.find(url, "https://github.com/(.-)/")
-  return repositoryName
-end
+-- now we write the files down
+print("Generating installed.db")
+file = fs.open("/etc/apt/list/installed.db" , "w")
+file.writeLine("minux-main")
+file.close()
+print("Generating source file")
+sourcefile = fs.open("/usr/apt/source.ls" , "w")
+sourcefile.writeLine(aptsource)
+sourcefile.close()
+print("Generating additional files")
+file = fs.open("/etc/apt/list/version/minux-main.v" , "w")
+file.writeLine("cleaninstall")
+file.close()
+print("Building boot configuration")
+shell.run("/etc/apt/sys/rebuildalias.sys")
 
--- Delete existing files in the repository
-local function deleteExistingFiles(repositoryName)
-  shell.run("rm", "-rf", repositoryName)
-end
 
--- Start repository download
-print("Welcome to the Mitsu OS  Installation Program")
-print("-------------------------------------------")
 
--- Prompt user for confirmation
-print("This program will install Mitsu OS  on your computer.")
-print("Note: All existing files will be deleted.")
-print("Do you want to continue? (y/n)")
-local confirm = read()
-
-if confirm == "y" or confirm == "Y" then
-  -- Delete existing files
-  local repositoryName = getRepositoryName(repoUrl)
-  deleteExistingFiles(repositoryName)
-  
-  -- Start download
-  print("Downloading Mitsu OS ...")
-  downloadDirectory(repoUrl, repositoryName)
-  print("Mitsu OS  installation completed!")
-else
-  print("Mitsu OS  installation canceled. Exiting program.")
+-- we wait for an enter, then reboot
+term.clear()
+term.setCursorPos(1,1)
+print("Minux installed, remove any disks in the drive and hit Enter to reboot")
+input = read()
+os.reboot()
 end
