@@ -110,7 +110,7 @@ elseif input == "install" or "reinstall" then
 -- we check to see if startup file already exists
 		if fs.exists("/startup") then
 			print("This system already has software installed")
-			print("Clear it out before installing Mitsu OS")
+			print("Clear it out before installing minux")
 			print("Hit Enter to exit to a normal shell")
 			input = read()
 			return 0
@@ -119,7 +119,7 @@ elseif input == "install" or "reinstall" then
 
 -- selecting installation source
 	local title = "Mitsu OS Installation source"
-	local choices = {"Stable", "Beta"}
+	local choices = {"Stable server", "Beta server", "Custom server"}
 	local actions = {}
 
 	actions[1] = function()
@@ -130,6 +130,10 @@ elseif input == "install" or "reinstall" then
 	print("beta selected")
 	input = "beta"
 	end
+	actions[3] = function()
+	print("custom")
+	input = "custom"
+	end	
 menuOptions(title, choices, actions)
 
 if input == "stable" then local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
