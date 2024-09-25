@@ -6,8 +6,6 @@ local ogTerm = term.current()
 local termX, termY = term.getSize()
 local bufferWindow = window.create(ogTerm, 1, 1, termX, termY)
 
--- Uses ">" as pointer instead of "->"
-
 function menuOptions(title, tChoices, tActions)
 local check = true
 local nSelection = 1
