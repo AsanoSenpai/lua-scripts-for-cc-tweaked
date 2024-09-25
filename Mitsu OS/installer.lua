@@ -135,9 +135,16 @@ elseif input == "install" or "reinstall" then
 	input = "custom"
 	end	
 menuOptions(title, choices, actions)
+end
 
-if input == "stable" then local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
-elseif input == "beta" then local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/beta/contents"
+if input == "stable" then repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
+elseif input == "beta" then repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/beta/contents"
+elseif input == "custom" then 
+	print("what is the server's url?")
+	print("give full path including https://")
+	input = read()
+	if input == nil or input == "" then print("invalid input, aborting") return 0
+	else aptsource = input end
 end
 
 print("Downloading files...")
