@@ -191,11 +191,11 @@ print("This program will install Mitsu OS on your computer.")
 print("Note: All existing files will be deleted.")
 print("Do you want to continue? (y/n)")
 local confirm = read()
-	if confirm == "y" or confirm == "Y" then
+if confirm == "y" or confirm == "Y" then
 	-- Delete existing files
 	local repositoryName = getRepositoryName(repoUrl)
 	deleteExistingFiles(repositoryName)
-  
+	  
 	-- Start download
 	print("Downloading Mitsu OS...")
 	downloadDirectory(repoUrl, repositoryName)
