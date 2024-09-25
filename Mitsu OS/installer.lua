@@ -152,7 +152,7 @@ print("Download Finished")
 -- we wait for an enter, then reboot
 term.clear()
 term.setCursorPos(1,1)
-print("Minux installed, remove any disks in the drive and hit Enter to reboot")
+print("Mitsu OS installed, remove any disks in the drive and hit Enter to reboot")
 input = read()
 os.reboot()
 end
