@@ -119,7 +119,7 @@ elseif input == "install" or "reinstall" then
 
 -- selecting installation source
 	local title = "Mitsu OS Installation source"
-	local choices = {"Stable server", "Beta server", "Custom server"}
+	local choices = {"Stable", "Beta"}
 	local actions = {}
 
 	actions[1] = function()
@@ -130,28 +130,85 @@ elseif input == "install" or "reinstall" then
 	print("beta selected")
 	input = "beta"
 	end
-	actions[3] = function()
-	print("custom")
-	input = "custom"
 	end	
 menuOptions(title, choices, actions)
 
-if input == "stable" then aptsource = "https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked/blob/main/Mitsu%20OS/apt/"
-elseif input == "beta" then aptsource = "https://github.com/AsanoSenpai/lua-scripts-for-cc-tweaked/blob/main/Mitsu%20OS/beta/"
-elseif input == "custom" then 
-	print("what is the server's url?")
-	print("give full path including https://")
-	input = read()
-	if input == nil or input == "" then print("invalid input, aborting") return 0
-	else aptsource = input end
+if input == "stable" then
+	local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
+elseif input == "beta" then
+	local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/beta/contents"
 end
-			
-print("Download Finished")
 
--- we wait for an enter, then reboot
-term.clear()
-term.setCursorPos(1,1)
-print("Mistu OS installed, remove any disks in the drive and hit Enter to reboot")
-input = read()
-os.reboot()
+print("Downloading files...")
+
+-- GitHub repository URL
+-- local repoUrl = "https://api.github.com/repos/Asano_Senpai/lua-scripts-for-cc-tweaked/Mitsu%20OS/stable/contents"
+
+-- Download file using wget
+local function downloadFile(url, destination)
+  shell.run("wget", url, destination)
+end
+
+-- Download directory and its contents recursively
+local function downloadDirectory(url, destination)
+  shell.run("mkdir", destination)
+  shell.run("cd", destination)
+  
+  local listing = http.get(url)
+  local content = listing.readAll()
+  listing.close()
+  
+  local files = textutils.unserializeJSON(content)
+  
+  for _, file in ipairs(files) do
+    if file.type == "file" then
+      downloadFile(file.download_url, file.name)
+    elseif file.type == "dir" then
+      downloadDirectory(file.url, file.name)
+    end
+  end
+  
+  shell.run("cd", "..")
+end
+
+-- Get repository name from URL
+local function getRepositoryName(url)
+  local _, _, repositoryName = string.find(url, "https://github.com/(.-)/")
+  return repositoryName
+end
+
+-- Delete existing files in the repository
+local function deleteExistingFiles(repositoryName)
+  shell.run("rm", "-rf", repositoryName)
+end
+
+-- Start repository download
+print("Welcome to the Mitsu OS Installation Program")
+print("-------------------------------------------")
+
+-- Prompt user for confirmation
+print("This program will install Mitsu OS on your computer.")
+print("Note: All existing files will be deleted.")
+print("Do you want to continue? (y/n)")
+local confirm = read()
+	if confirm == "y" or confirm == "Y" then
+	-- Delete existing files
+	local repositoryName = getRepositoryName(repoUrl)
+	deleteExistingFiles(repositoryName)
+  
+	-- Start download
+	print("Downloading Mitsu OS...")
+	downloadDirectory(repoUrl, repositoryName)
+
+	print("Download Finished")
+
+	-- we wait for an enter, then reboot
+	term.clear()
+	term.setCursorPos(1,1)
+	print("Mistu OS installed, remove any disks in the drive and hit Enter to reboot")
+	input = read()
+	os.reboot()
+	end
+else
+	print("Mitsu OS installation canceled. Exiting program.")
 end
