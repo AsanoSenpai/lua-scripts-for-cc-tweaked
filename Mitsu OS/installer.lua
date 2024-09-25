@@ -128,8 +128,8 @@ elseif input == "install" or "reinstall" then
 	end	
 menuOptions(title, choices, actions)
 
-if input == "stable" then local repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/stable?ref=main"
-elseif input == "beta" then local repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/beta?ref=main"
+if input == "stable" then repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/stable?ref=main"
+elseif input == "beta" then repoUrl = "https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/beta?ref=main"
 elseif input == "custom" then 
 	print("what is the server's url?")
 	print("give full path including https://")
@@ -190,7 +190,7 @@ local confirm = read()
 
 if confirm == "y" or confirm == "Y" then
 	-- delete existing files
-	local repositoryName = getRepositoryName("https://api.github.com/repos/AsanoSenpai/lua-scripts-for-cc-tweaked/contents/Mitsu%20OS/stable?ref=main")
+	local repositoryName = getRepositoryName(repoUrl)
 	print("test successfull")
 	deleteExistingFiles(repositoryName)
 
