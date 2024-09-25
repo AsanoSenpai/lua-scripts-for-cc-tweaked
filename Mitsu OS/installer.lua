@@ -209,6 +209,4 @@ if confirm == "y" or confirm == "Y" then
 	print("Mistu OS installed, remove any disks in the drive and hit Enter to reboot")
 	input = read()
 	os.reboot()
-else
-	print("Mitsu OS installation canceled. Exiting program.")
 end
